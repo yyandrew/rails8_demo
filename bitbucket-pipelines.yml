@@ -13,8 +13,8 @@ pipelines:
         script: # Modify the commands below to build your repository.
           # - bundle install
           - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
-          - docker build -t lg201/rails8_demo:1.0.0 .
-          - docker push lg201/rails8_demo:1.0.0
+          - docker build -t lg201/rails8_demo:1.0.1 .
+          - docker push lg201/rails8_demo:1.0.1
         services:
           - docker
 definitions:
