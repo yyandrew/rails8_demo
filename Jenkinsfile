@@ -17,7 +17,7 @@ pipeline {
         APP_NAME = "rails8_demo" // <-- 替换为您的 Rails 应用名称
     }
 
-    // stages {
+    stages {
         stage('Checkout Source Code') {
             steps {
                 script {
@@ -72,7 +72,7 @@ pipeline {
                 // }
             // }
         // }
-    // }
+    }
 
     post {
         // always {
