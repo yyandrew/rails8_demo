@@ -21,6 +21,8 @@ pipeline {
         stage('Checkout Source Code') {
             steps {
                 script {
+                    // Add this line to automatically add bitbucket.org's key
+                    sh 'ssh-keyscan bitbucket.org >> ~/.ssh/known_hosts'
                     // 拉取 Git 仓库代码
                     // 假设您配置了 SSH 凭证 ID 为 bitbucket-ssh-key
                     // 如果是用户名/密码，使用 credentialsId: 'bitbucket-credentials'
