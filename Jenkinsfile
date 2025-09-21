@@ -18,19 +18,19 @@ pipeline {
     }
 
     // stages {
-        // stage('Checkout Source Code') {
-            // steps {
-                // script {
-                    // // Add this line to automatically add bitbucket.org's key
-                    // sh 'ssh-keyscan bitbucket.org >> ~/.ssh/known_hosts'
-                    // // 拉取 Git 仓库代码
-                    // // 假设您配置了 SSH 凭证 ID 为 bitbucket-ssh-key
-                    // // 如果是用户名/密码，使用 credentialsId: 'bitbucket-credentials'
-                    // // 或如果仓库是公开的，则无需凭证
-                    // git branch: 'main', credentialsId: 'bitbucket-ssh-key', url: 'git@bitbucket.org:yeang/rails8_demo.git' // <-- 替换为您的 Bitbucket 仓库 URL
-                // }
-            // }
-        // }
+        stage('Checkout Source Code') {
+            steps {
+                script {
+                    // Add this line to automatically add bitbucket.org's key
+                    sh 'mkdir -p ~/.ssh && ssh-keyscan bitbucket.org >> ~/.ssh/known_hosts'
+                    // 拉取 Git 仓库代码
+                    // 假设您配置了 SSH 凭证 ID 为 bitbucket-ssh-key
+                    // 如果是用户名/密码，使用 credentialsId: 'bitbucket-credentials'
+                    // 或如果仓库是公开的，则无需凭证
+                    git branch: 'main', credentialsId: 'bitbucket-ssh-key', url: 'git@bitbucket.org:yeang/rails8_demo.git' // <-- 替换为您的 Bitbucket 仓库 URL
+                }
+            }
+        }
 
         // stage('Build and Test Rails App') {
             // steps {
