@@ -73,9 +73,17 @@ pipeline {
     }
 
     post {
+        // always {
+            // // 无论构建成功或失败，都会执行
+            // cleanWs() // 清理 Jenkins 工作区
+        // }
         always {
-            // 无论构建成功或失败，都会执行
-            cleanWs() // 清理 Jenkins 工作区
+            // This block will run whether the build succeeds or fails.
+            // We'll keep the pod alive for 900 seconds (15 minutes) for debugging.
+            script {
+                echo "Build finished. Pod will remain active for 15 minutes for debugging..."
+                sleep 900
+            }
         }
         success {
             echo 'Pipeline succeeded!'
