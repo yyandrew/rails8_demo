@@ -24,6 +24,7 @@ pipeline {
                     // Add this line to automatically add bitbucket.org's key
                     sh 'mkdir -p ~/.ssh && ssh-keyscan bitbucket.org >> ~/.ssh/known_hosts'
                     sh 'chmod 600 "${BITBUCKET_SSH_KEY_FILE}"'
+                    sh 'echo "key file is: ${BITBUCKET_SSH_KEY_FILE}"'
                     // 拉取 Git 仓库代码
                     // 假设您配置了 SSH 凭证 ID 为 bitbucket-ssh-key
                     // 如果是用户名/密码，使用 credentialsId: 'bitbucket-credentials'
