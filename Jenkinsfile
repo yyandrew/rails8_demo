@@ -11,7 +11,7 @@ pipeline {
     environment {
         // Docker Hub 用户名，从 Kubernetes Secret 挂载的环境变量中获取
         // 或者直接在这里硬编码您的 Docker Hub 用户名
-        DOCKER_HUB_USER = lg201 // <-- 替换为您的 Docker Hub 用户名
+        DOCKER_HUB_USER = "lg201" // <-- 替换为您的 Docker Hub 用户名
 
         // 应用程序名称，用于构建 Docker 镜像标签
         APP_NAME = "rails8_demo" // <-- 替换为您的 Rails 应用名称
@@ -23,6 +23,7 @@ pipeline {
                 script {
                     // Add this line to automatically add bitbucket.org's key
                     sh 'mkdir -p ~/.ssh && ssh-keyscan bitbucket.org >> ~/.ssh/known_hosts'
+                    sh 'chmod 600 "${BITBUCKET_SSH_KEY_FILE}"'
                     // 拉取 Git 仓库代码
                     // 假设您配置了 SSH 凭证 ID 为 bitbucket-ssh-key
                     // 如果是用户名/密码，使用 credentialsId: 'bitbucket-credentials'
@@ -32,19 +33,19 @@ pipeline {
             }
         }
 
-        // stage('Build and Test Rails App') {
-            // steps {
-                // // 使用 jnlp 容器运行 Rails 相关命令
-                // container('jnlp') {
-                    // script {
-                        // // 运行 Rails 依赖安装
-                        // sh 'bundle install --without development test'
-                        // // 运行 Rails 测试 (如果您的项目有)
-                        // // sh 'bundle exec rails test'
-                    // }
-                // }
-            // }
-        // }
+        stage('Build and Test Rails App') {
+            steps {
+                // 使用 jnlp 容器运行 Rails 相关命令
+                container('jnlp') {
+                    script {
+                        // 运行 Rails 依赖安装
+                        sh 'bundle install --without development test'
+                        // 运行 Rails 测试 (如果您的项目有)
+                        // sh 'bundle exec rails test'
+                    }
+                }
+            }
+        }
 
         // stage('Build and Push Rails Docker Image') {
             // steps {
