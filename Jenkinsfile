@@ -18,10 +18,14 @@ pipeline {
     }
 
     stages {
-     stage('Checkout Source Code') {
+        stage('Checkout Source Code') {
             steps {
-                // This simple checkout will now work perfectly because the agent
-                // is automatically configured with the correct SSH keys.
+                script {
+                    // 👇👇👇 这是解决问题的核心 👇👇👇
+                    // 在执行 git 操作之前，先创建 .ssh 目录并自动扫描和添加 bitbucket.org 的主机密钥
+                    sh 'mkdir -p ~/.ssh && ssh-keyscan bitbucket.org >> ~/.ssh/known_hosts'
+                }
+                // 现在，标准的 checkout scm 就可以成功运行了
                 checkout scm
             }
         }
@@ -40,7 +44,7 @@ pipeline {
 
         stage('Clean Up') {
             steps {
-                cleanWs() // Clean up the workspace
+                cleanWs() // 清理工作区
             }
         }
     }
