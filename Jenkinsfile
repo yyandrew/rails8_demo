@@ -4,7 +4,7 @@ pipeline {
     // 使用我们在 Jenkins UI 中配置的 Kaniko Pod 模板
     agent {
         kubernetes {
-            label 'kaniko-builder'
+            inheritFrom 'kaniko-builder'
         }
     }
 
