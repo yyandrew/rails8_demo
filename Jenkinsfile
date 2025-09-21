@@ -42,18 +42,9 @@ pipeline {
             }
         }
 
-        stage('Clean Up') {
-            steps {
-                cleanWs() // 清理工作区
-            }
-        }
     }
 
     post {
-        always {
-            // 无论构建成功或失败，都会执行
-            cleanWs() // 清理 Jenkins 工作区
-        }
         success {
             echo 'Pipeline succeeded!'
         }
