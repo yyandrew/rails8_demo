@@ -32,11 +32,36 @@ pipeline {
 
         stage('Build and Push Docker Image') {
             steps {
+                // 切换到 kaniko 容器
                 container('kaniko') {
-                    script {
-                        sh """
-                        /kaniko/executor --context `pwd` --dockerfile `pwd`/Dockerfile --destination ${DOCKER_HUB_USER}/${APP_NAME}:${env.BUILD_NUMBER} --destination ${DOCKER_HUB_USER}/${APP_NAME}:latest
-                        """
+                    // 使用 withCredentials 从 Jenkins 内部获取凭证，并绑定到环境变量
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds-jenkins', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_TOKEN')]) {
+                        script {
+                            echo 'Creating Docker config.json for Kaniko...'
+                            
+                            // 手动创建 Kaniko 需要的 config.json 文件
+                            // 1. 将 "用户名:访问令牌" 进行 Base64 编码
+                            // 2. 将编码后的字符串写入一个 JSON 文件中
+                            sh '''
+                            DOCKER_AUTH=`echo -n "${DOCKER_USER}:${DOCKER_TOKEN}" | base64`
+                            cat <<EOF > /kaniko/.docker/config.json
+                            {
+                              "auths": {
+                                "https://index.docker.io/v1/": {
+                                  "auth": "${DOCKER_AUTH}"
+                                }
+                              }
+                            }
+                            EOF
+                            '''
+                            
+                            echo 'Docker config created successfully. Starting Kaniko build...'
+
+                            // Kaniko 的执行命令保持不变，它会自动读取我们刚刚创建的配置文件
+                            sh """
+                            /kaniko/executor --context `pwd` --dockerfile `pwd`/Dockerfile --destination ${env.DOCKER_HUB_USER}/${env.APP_NAME}:${env.BUILD_NUMBER} --destination ${env.DOCKER_HUB_USER}/${env.APP_NAME}:latest
+                            """
+                        }
                     }
                 }
             }
