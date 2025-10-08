@@ -63,7 +63,7 @@ pipeline {
 
                             // Kaniko 的执行命令保持不变，它会自动读取我们刚刚创建的配置文件
                             sh """
-                            /kaniko/executor --context `pwd` --dockerfile `pwd`/Dockerfile --destination ${dest1} --destination ${dest2} --cache=true
+                            /kaniko/executor --context `pwd` --dockerfile `pwd`/Dockerfile --destination ${dest1} --destination ${dest2}
                             """
                         }
                     }
