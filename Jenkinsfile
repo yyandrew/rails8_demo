@@ -17,7 +17,7 @@ pipeline {
         // 应用程序名称，用于构建 Docker 镜像标签
         APP_NAME = "rails8_demo" // <-- 替换为您的 Rails 应用名称
 
-        CONFIG_REPO_URL_SSH = "git@github.com:yyandrew/argo.git"
+        CONFIG_REPO_URL_SSH = "https://github.com/yyandrew/argo.git"
         CONFIG_REPO_BRANCH = 'main'
         CONFIG_REPO_CREDENTIALS_ID = 'github-pat-with-username' // Jenkins 中创建的 SSH 凭证 ID
 
