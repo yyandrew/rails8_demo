@@ -16,6 +16,14 @@ pipeline {
 
         // 应用程序名称，用于构建 Docker 镜像标签
         APP_NAME = "rails8_demo" // <-- 替换为您的 Rails 应用名称
+
+        CONFIG_REPO_URL_SSH = "git@github.com:yyandrew/argo.git"
+        CONFIG_REPO_BRANCH = 'main'
+        CONFIG_REPO_CREDENTIALS_ID = 'github-pat-with-username' // Jenkins 中创建的 SSH 凭证 ID
+
+        // Git 提交时使用的用户信息
+        GIT_COMMIT_AUTHOR_EMAIL = 'jenkins-ci@jenkins.local'
+        GIT_COMMIT_AUTHOR_NAME = 'Jenkins CI'
     }
 
     stages {
@@ -70,7 +78,60 @@ pipeline {
                 }
             }
         }
+        stage('Update Deployment Configuration in Git') {
+            steps {
+                script {
+                    // 定义新的镜像标签
+                    def newImageTag = "${env.APP_NAME}:1.${env.BUILD_NUMBER}.0"
+                    echo "New image tag to be set: ${newImageTag}"
 
+                    // 在一个独立的目录中 checkout 配置仓库，避免和主工作区冲突
+                    dir('config-repo') {
+                        // 1. 拉取配置仓库代码，使用我们配置的 SSH 凭证
+                        echo "Checking out configuration repository: ${env.CONFIG_REPO_URL_SSH}"
+                        checkout([
+                            $class: 'GitSCM',
+                            branches: [[name: env.CONFIG_REPO_BRANCH]],
+                            userRemoteConfigs: [[
+                                credentialsId: env.CONFIG_REPO_CREDENTIALS_ID,
+                                url: env.CONFIG_REPO_URL_SSH
+                            ]]
+                        ])
+
+                        // 2. 修改 values.yaml 文件
+                        echo "Updating image tag in values.yaml..."
+                        // 确保 yq 已安装在你的 Jenkins Agent 上
+                        // sh 'which yq || (wget ... && chmod +x /usr/local/bin/yq)'
+                        sh """
+                        cd rails8_demo
+                        yq -i '.image.tag = "${newImageTag}"' values.yaml
+                        echo "Updated content of values.yaml:"
+                        cat values.yaml
+                        """
+
+                        // 3. 提交并推送回 Git
+                        echo "Committing and pushing changes to Git..."
+                        sh """
+                        # 配置 Git 用户信息，这样提交记录才知道作者是谁
+                        git config user.email "${env.GIT_COMMIT_AUTHOR_EMAIL}"
+                        git config user.name "${env.GIT_COMMIT_AUTHOR_NAME}"
+
+                        # 将修改添加到暂存区
+                        git add rails8_demo/values.yaml
+
+                        # 检查是否有变更，只有在有变更时才提交，避免空提交
+                        if ! git diff --staged --quiet; then
+                            git commit -m "ci(deploy): Update image tag to ${newImageTag} for build #${env.BUILD_NUMBER}"
+                            git push origin ${env.CONFIG_REPO_BRANCH}
+                            echo "Changes pushed to Git successfully."
+                        else
+                            echo "No changes detected in values.yaml. Skipping commit."
+                        fi
+                        """
+                    }
+                }
+            }
+        }
     }
 
     post {
@@ -79,6 +140,10 @@ pipeline {
         }
         failure {
             echo 'Pipeline failed!'
+        }
+        always {
+            // 清理工作区
+            deleteDir()
         }
     }
 }
