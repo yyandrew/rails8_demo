@@ -103,6 +103,24 @@ pipeline {
                         // 确保 yq 已安装在你的 Jenkins Agent 上
                         // sh 'which yq || (wget ... && chmod +x /usr/local/bin/yq)'
                         sh """
+                        # --- 开始：动态安装 yq ---
+                        # 1. 定义 yq 版本和下载地址
+                        YQ_VERSION="v4.44.1" # 你可以指定一个具体的 yq 版本
+                        YQ_BINARY="yq_linux_amd64" # 根据你的 Agent 系统架构选择，amd64 是最常见的
+
+                        # 2. 检查 yq 是否已存在，不存在则下载
+                        if ! command -v yq &> /dev/null
+                        then
+                            echo "yq could not be found, installing it..."
+                            wget "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/${YQ_BINARY}" -O ./yq
+                            chmod +x ./yq
+
+                            # 定义一个别名或将当前目录加入 PATH，以便后续直接调用 yq
+                            # 这里我们直接使用 './yq' 调用，更简单明确
+                        else
+                            echo "yq is already installed."
+                        fi
+                        # --- 结束：动态安装 yq ---
                         cd rails8_demo
                         yq -i '.image.tag = "${newImageTag}"' values.yaml
                         echo "Updated content of values.yaml:"
