@@ -22,8 +22,8 @@ pipeline {
         CONFIG_REPO_CREDENTIALS_ID = 'github-pat-with-username' // Jenkins 中创建的 SSH 凭证 ID
 
         // Git 提交时使用的用户信息
-        GIT_COMMIT_AUTHOR_EMAIL = 'qqerqqer@126.com'
-        GIT_COMMIT_AUTHOR_NAME = 'lq201'
+        GIT_COMMIT_AUTHOR_EMAIL = 'jenkins-ci@jenkins.local'
+        GIT_COMMIT_AUTHOR_NAME = 'Jenkins CI'
     }
 
     stages {
@@ -104,45 +104,48 @@ pipeline {
                         echo "Updating image tag in values.yaml..."
                         // 确保 yq 已安装在你的 Jenkins Agent 上
                         // sh 'which yq || (wget ... && chmod +x /usr/local/bin/yq)'
-                        sh """
-                        cd rails8_demo
-                        # 检查 yq 是否已存在，不存在则下载
-                        if ! command -v yq &> /dev/null
-                        then
-                            echo "yq could not be found, installing it..."
-                            curl -sL "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/${YQ_BINARY}" -o ./yq
-                            chmod +x ./yq
+                        withCredentials([usernamePassword(credentialsId: 'github-pat-with-username', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                            sh """
+                            cd rails8_demo
+                            # 检查 yq 是否已存在，不存在则下载
+                            if ! command -v yq &> /dev/null
+                            then
+                                echo "yq could not be found, installing it..."
+                                curl -sL "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/${YQ_BINARY}" -o ./yq
+                                chmod +x ./yq
 
-                            # 定义一个别名或将当前目录加入 PATH，以便后续直接调用 yq
-                            # 这里我们直接使用 './yq' 调用，更简单明确
-                        else
-                            echo "yq is already installed."
-                        fi
-                        # --- 结束：动态安装 yq ---
-                        ./yq -i '.image.tag = "${newImageTag}"' values.yaml
-                        echo "Updated content of values.yaml:"
-                        cat values.yaml
-                        """
+                                # 定义一个别名或将当前目录加入 PATH，以便后续直接调用 yq
+                                # 这里我们直接使用 './yq' 调用，更简单明确
+                            else
+                                echo "yq is already installed."
+                            fi
+                            # --- 结束：动态安装 yq ---
+                            ./yq -i '.image.tag = "${newImageTag}"' values.yaml
+                            echo "Updated content of values.yaml:"
+                            cat values.yaml
+                            """
 
-                        // 3. 提交并推送回 Git
-                        echo "Committing and pushing changes to Git..."
-                        sh """
-                        # 配置 Git 用户信息，这样提交记录才知道作者是谁
-                        git config user.email "${env.GIT_COMMIT_AUTHOR_EMAIL}"
-                        git config user.name "${env.GIT_COMMIT_AUTHOR_NAME}"
+                            // 3. 提交并推送回 Git
+                            echo "Committing and pushing changes to Git..."
+                            sh """
+                            # 配置 Git 用户信息，这样提交记录才知道作者是谁
+                            git config user.email "${env.GIT_COMMIT_AUTHOR_EMAIL}"
+                            git config user.name "${env.GIT_COMMIT_AUTHOR_NAME}"
 
-                        # 将修改添加到暂存区
-                        git add rails8_demo/values.yaml
+                            # 将修改添加到暂存区
+                            git add rails8_demo/values.yaml
 
-                        # 检查是否有变更，只有在有变更时才提交，避免空提交
-                        if ! git diff --staged --quiet; then
-                            git commit -m "ci(deploy): Update image tag to ${newImageTag} for build #${env.BUILD_NUMBER}"
-                            git push origin HEAD:${env.CONFIG_REPO_BRANCH}
-                            echo "Changes pushed to Git successfully."
-                        else
-                            echo "No changes detected in values.yaml. Skipping commit."
-                        fi
-                        """
+                            # 检查是否有变更，只有在有变更时才提交，避免空提交
+                            if ! git diff --staged --quiet; then
+                                git commit -m "ci(deploy): Update image tag to ${newImageTag} for build #${env.BUILD_NUMBER}"
+                                git remote set-url origin "https://x-access-token:${GIT_TOKEN}@github.com/yyandrew/argo.git"
+                                git push origin HEAD:${env.CONFIG_REPO_BRANCH}
+                                echo "Changes pushed to Git successfully."
+                            else
+                                echo "No changes detected in values.yaml. Skipping commit."
+                            fi
+                            """
+                        }
                     }
                 }
             }
