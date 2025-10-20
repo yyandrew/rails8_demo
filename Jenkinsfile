@@ -79,12 +79,6 @@ pipeline {
             }
         }
         stage('Update Deployment Configuration in Git') {
-            agent {
-                docker {
-                    image 'mikefarah/yq:4' // 使用 yq 官方的 Docker 镜像
-                    args '-u root' // 有时需要指定用户以避免权限问题
-                }
-            }
             steps {
                 script {
                     // 定义新的镜像标签
