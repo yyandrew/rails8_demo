@@ -137,7 +137,7 @@ pipeline {
                         # 检查是否有变更，只有在有变更时才提交，避免空提交
                         if ! git diff --staged --quiet; then
                             git commit -m "ci(deploy): Update image tag to ${newImageTag} for build #${env.BUILD_NUMBER}"
-                            git push origin ${env.CONFIG_REPO_BRANCH}
+                            git push origin HEAD:${env.CONFIG_REPO_BRANCH}
                             echo "Changes pushed to Git successfully."
                         else
                             echo "No changes detected in values.yaml. Skipping commit."
