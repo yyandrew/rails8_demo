@@ -109,7 +109,7 @@ pipeline {
                         if ! command -v yq &> /dev/null
                         then
                             echo "yq could not be found, installing it..."
-                            wget "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/${YQ_BINARY}" -O ./yq
+                            curl -sL "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/${YQ_BINARY}" -o ./yq
                             chmod +x ./yq
 
                             # 定义一个别名或将当前目录加入 PATH，以便后续直接调用 yq
