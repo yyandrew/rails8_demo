@@ -22,8 +22,8 @@ pipeline {
         CONFIG_REPO_CREDENTIALS_ID = 'github-pat-with-username' // Jenkins 中创建的 SSH 凭证 ID
 
         // Git 提交时使用的用户信息
-        GIT_COMMIT_AUTHOR_EMAIL = 'jenkins-ci@jenkins.local'
-        GIT_COMMIT_AUTHOR_NAME = 'Jenkins CI'
+        GIT_COMMIT_AUTHOR_EMAIL = 'qqerqqer@126.com'
+        GIT_COMMIT_AUTHOR_NAME = 'lq201'
     }
 
     stages {
