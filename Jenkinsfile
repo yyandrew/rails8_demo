@@ -39,50 +39,50 @@ pipeline {
             }
         }
 
-        // stage('Build and Push Docker Image') {
-            // steps {
-                // // 切换到 kaniko 容器
-                // container('kaniko') {
-                    // // 使用 withCredentials 从 Jenkins 内部获取凭证，并绑定到环境变量
-                    // withCredentials([usernamePassword(credentialsId: 'harbor-creds-jenkins', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        // script {
-                            // echo 'Creating Docker config.json for Kaniko...'
+        stage('Build and Push Docker Image') {
+            steps {
+                // 切换到 kaniko 容器
+                container('kaniko') {
+                    // 使用 withCredentials 从 Jenkins 内部获取凭证，并绑定到环境变量
+                    withCredentials([usernamePassword(credentialsId: 'harbor-creds-jenkins', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        script {
+                            echo 'Creating Docker config.json for Kaniko...'
 
-                            // // 手动创建 Kaniko 需要的 config.json 文件
-                            // // 1. 将 "用户名:访问令牌" 进行 Base64 编码
-                            // // 2. 将编码后的字符串写入一个 JSON 文件中
-                            // sh '''
-                            // DOCKER_AUTH=`echo -n "${DOCKER_USER}:${DOCKER_PASSWORD}" | base64`
-                            // cat <<EOF > /kaniko/.docker/config.json
-                            // {
-                              // "auths": {
-                                // "https://${HARBOR_DOMAIN}": {
-                                  // "auth": "${DOCKER_AUTH}"
-                                // }
-                              // }
-                            // }
-                            // EOF
-                            // '''
+                            // 手动创建 Kaniko 需要的 config.json 文件
+                            // 1. 将 "用户名:访问令牌" 进行 Base64 编码
+                            // 2. 将编码后的字符串写入一个 JSON 文件中
+                            sh '''
+                            DOCKER_AUTH=`echo -n "${DOCKER_USER}:${DOCKER_PASSWORD}" | base64`
+                            cat <<EOF > /kaniko/.docker/config.json
+                            {
+                              "auths": {
+                                "https://${HARBOR_DOMAIN}": {
+                                  "auth": "${DOCKER_AUTH}"
+                                }
+                              }
+                            }
+                            EOF
+                            '''
 
-                            // echo 'Docker config created successfully. Starting Kaniko build...'
-                            // def dest1 = "${HARBOR_DOMAIN}/${PROJECT}/${APP_NAME}:1.${BUILD_NUMBER}.0"
-                            // def dest2 = "${HARBOR_DOMAIN}/${PROJECT}/${APP_NAME}:latest"
+                            echo 'Docker config created successfully. Starting Kaniko build...'
+                            def dest1 = "${HARBOR_DOMAIN}/${PROJECT}/${APP_NAME}:1.${BUILD_NUMBER}.0"
+                            def dest2 = "${HARBOR_DOMAIN}/${PROJECT}/${APP_NAME}:latest"
 
 
-                            // // Kaniko 的执行命令保持不变，它会自动读取我们刚刚创建的配置文件
-                            // sh """
-                            // /kaniko/executor --context `pwd` --dockerfile `pwd`/Dockerfile --destination ${dest1} --destination ${dest2}
-                            // """
-                        // }
-                    // }
-                // }
-            // }
-        // }
+                            // Kaniko 的执行命令保持不变，它会自动读取我们刚刚创建的配置文件
+                            sh """
+                            /kaniko/executor --context `pwd` --dockerfile `pwd`/Dockerfile --destination ${dest1} --destination ${dest2}
+                            """
+                        }
+                    }
+                }
+            }
+        }
         stage('Update Deployment Configuration in Git') {
             steps {
                 script {
                     // 定义新的镜像标签
-                    def newImageTag = "${env.APP_NAME}:1.${env.BUILD_NUMBER}.0"
+                    def newImageTag = "1.${env.BUILD_NUMBER}.0"
                     def YQ_VERSION="v4.44.1" // 你可以指定一个具体的 yq 版本
                     def YQ_BINARY="yq_linux_amd64" // 根据你的 Agent 系统架构选择，amd64 是最常见的
                     echo "New image tag to be set: ${newImageTag}"
