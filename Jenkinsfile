@@ -119,7 +119,7 @@ pipeline {
                             echo "yq is already installed."
                         fi
                         # --- 结束：动态安装 yq ---
-                        yq -i '.image.tag = "${newImageTag}"' values.yaml
+                        ./yq -i '.image.tag = "${newImageTag}"' values.yaml
                         echo "Updated content of values.yaml:"
                         cat values.yaml
                         """
