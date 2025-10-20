@@ -39,7 +39,7 @@ pipeline {
             }
         }
 
-        stage('Build and Push Docker Image') {
+        // stage('Build and Push Docker Image') {
             // steps {
                 // // 切换到 kaniko 容器
                 // container('kaniko') {
@@ -77,7 +77,7 @@ pipeline {
                     // }
                 // }
             // }
-        }
+        // }
         stage('Update Deployment Configuration in Git') {
             steps {
                 script {
