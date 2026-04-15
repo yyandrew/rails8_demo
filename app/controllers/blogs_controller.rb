@@ -1,11 +1,11 @@
 class BlogsController < ApplicationController
   before_action :set_blog, only: %i[ show edit update destroy ]
-  before_action :require_login, only: %i[ new create edit update destroy ]
-  before_action :authorize_blog_owner!, only: %i[ edit update destroy ]
+  before_action :require_login
+  before_action :authorize_blog_owner!, only: %i[ show edit update destroy ]
 
   # GET /blogs or /blogs.json
   def index
-    @blogs = Blog.includes(:user).order(:id)
+    @blogs = current_user.blogs.includes(:user).order(:id)
   end
 
   # GET /blogs/1 or /blogs/1.json

@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    @blogs = @user.blogs.order(:id)
+    @blogs = current_user == @user ? @user.blogs.order(:id) : Blog.none
   end
 
   def new

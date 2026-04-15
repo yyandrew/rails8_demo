@@ -5,20 +5,22 @@
     <div>
       <p class="chip">Publishing</p>
       <h2 class="section-title">Blogs</h2>
-      <p class="section-copy">Browse every post in the system. Logged-in users can publish under their own account only.</p>
+      <p class="section-copy">Manage only the blogs created under your own account.</p>
     </div>
-    <% if logged_in? %>
-      <%= link_to "New blog", new_blog_path, class: "button button-primary" %>
-    <% else %>
-      <%= link_to "Login to publish", login_path, class: "button button-primary" %>
-    <% end %>
+    <%= link_to "New blog", new_blog_path, class: "button button-primary" %>
   </div>
 
   <div id="blogs" class="card-grid card-grid-two">
-    <% @blogs.each do |blog| %>
-      <div class="card-wrap">
-        <%= render blog %>
-        <%= link_to "Show this blog", blog, class: "card-link" %>
+    <% if @blogs.any? %>
+      <% @blogs.each do |blog| %>
+        <div class="card-wrap">
+          <%= render blog %>
+          <%= link_to "Show this blog", blog, class: "card-link" %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="panel">
+        <p class="empty-state">You have not created any blogs yet.</p>
       </div>
     <% end %>
   </div>

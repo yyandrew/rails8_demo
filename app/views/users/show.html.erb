@@ -6,7 +6,7 @@
     <h2 class="subheading">Blogs by <%= @user.username %></h2>
   </div>
 
-  <% if @blogs.any? %>
+  <% if current_user == @user && @blogs.any? %>
     <div id="user_blogs" class="card-grid card-grid-two">
       <% @blogs.each do |blog| %>
         <div class="card-wrap">
@@ -15,9 +15,13 @@
         </div>
       <% end %>
     </div>
+  <% elsif current_user == @user %>
+    <div class="panel">
+      <p class="empty-state">You have not created any blogs yet.</p>
+    </div>
   <% else %>
     <div class="panel">
-      <p class="empty-state">This user has no blogs yet.</p>
+      <p class="empty-state">You cannot view another user's blogs.</p>
     </div>
   <% end %>
 
