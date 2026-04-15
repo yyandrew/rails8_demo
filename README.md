@@ -7,7 +7,7 @@ docker network create rails8_demo-network
 ```
 * Start postgres container
 ```
-docker run -d \                                                                                                                                                                                                                                                        130 ↵
+docker run -d \
   --name postgres-db \
   --network rails8_demo-network \
   -e POSTGRES_USER=rails8-demo \
