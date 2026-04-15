@@ -62,3 +62,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "opentelemetry-exporter-otlp", "~> 0.33.0"
+gem "opentelemetry-sdk", "~> 1.11"
+gem "opentelemetry-instrumentation-all", "~> 0.92.0"
