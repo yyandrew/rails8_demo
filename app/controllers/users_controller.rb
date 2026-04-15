@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
+  before_action :require_login, only: %i[ edit update destroy ]
+  before_action :authorize_user!, only: %i[ edit update destroy ]
 
   def index
     @users = User.includes(:blogs).order(:id)
@@ -21,6 +23,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
+        session[:user_id] = @user.id
         format.html { redirect_to @user, notice: "User was successfully created." }
         format.json { render :show, status: :created, location: @user }
       else
@@ -57,6 +60,12 @@ class UsersController < ApplicationController
     end
 
     def user_params
-      params.expect(user: [ :username ])
+      params.expect(user: [ :username, :password, :password_confirmation ])
+    end
+
+    def authorize_user!
+      return if @user == current_user
+
+      redirect_to users_path, alert: "You can only manage your own account."
     end
 end

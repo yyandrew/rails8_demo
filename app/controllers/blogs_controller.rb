@@ -1,6 +1,7 @@
 class BlogsController < ApplicationController
   before_action :set_blog, only: %i[ show edit update destroy ]
-  before_action :set_users, only: %i[ new edit create update ]
+  before_action :require_login, only: %i[ new create edit update destroy ]
+  before_action :authorize_blog_owner!, only: %i[ edit update destroy ]
 
   # GET /blogs or /blogs.json
   def index
@@ -22,7 +23,7 @@ class BlogsController < ApplicationController
 
   # POST /blogs or /blogs.json
   def create
-    @blog = Blog.new(blog_params)
+    @blog = current_user.blogs.build(blog_params)
 
     respond_to do |format|
       if @blog.save
@@ -66,10 +67,12 @@ class BlogsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def blog_params
-      params.expect(blog: [ :title, :user_id ])
+      params.expect(blog: [ :title ])
     end
 
-    def set_users
-      @users = User.order(:username)
+    def authorize_blog_owner!
+      return if @blog.user == current_user
+
+      redirect_to blogs_path, alert: "You can only manage your own blogs."
     end
 end

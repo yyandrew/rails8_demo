@@ -22,6 +22,26 @@
   </head>
 
   <body>
+    <nav>
+      <%= link_to "Blogs", blogs_path %> |
+      <%= link_to "Users", users_path %> |
+      <% if logged_in? %>
+        Logged in as <%= current_user.username %> |
+        <%= button_to "Logout", logout_path, method: :delete, form: { style: "display: inline-block" } %>
+      <% else %>
+        <%= link_to "Sign up", signup_path %> |
+        <%= link_to "Login", login_path %>
+      <% end %>
+    </nav>
+
+    <% if notice %>
+      <p style="color: green"><%= notice %></p>
+    <% end %>
+
+    <% if alert %>
+      <p style="color: red"><%= alert %></p>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>

@@ -2,6 +2,8 @@
 
 <h1>Editing blog</h1>
 
+<p>Creator: <%= @blog.user.username %></p>
+
 <%= render "form", blog: @blog %>
 
 <br>
