@@ -2,7 +2,12 @@
 
 <% content_for :title, "My Blogs" %>
 
-<h1>My Blogs 123</h1>
+<nav>
+  <%= link_to "Blogs", blogs_path %> |
+  <%= link_to "Users", users_path %>
+</nav>
+
+<h1>Blogs</h1>
 
 <div id="blogs">
   <% @blogs.each do |blog| %>

@@ -17,6 +17,11 @@
   </div>
 
   <div>
+    <%= form.label :user_id, "User", style: "display: block" %>
+    <%= form.collection_select :user_id, @users, :id, :username, prompt: "Select a user" %>
+  </div>
+
+  <div>
     <%= form.submit %>
   </div>
 <% end %>

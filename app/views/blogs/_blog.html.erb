@@ -4,4 +4,13 @@
     <%= blog.title %>
   </p>
 
+  <p>
+    <strong>User:</strong>
+    <% if blog.user %>
+      <%= link_to blog.user.username, blog.user %>
+    <% else %>
+      Unassigned
+    <% end %>
+  </p>
+
 </div>

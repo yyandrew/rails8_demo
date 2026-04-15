@@ -1,9 +1,10 @@
 class BlogsController < ApplicationController
   before_action :set_blog, only: %i[ show edit update destroy ]
+  before_action :set_users, only: %i[ new edit create update ]
 
   # GET /blogs or /blogs.json
   def index
-    @blogs = Blog.all
+    @blogs = Blog.includes(:user).order(:id)
   end
 
   # GET /blogs/1 or /blogs/1.json
@@ -65,6 +66,10 @@ class BlogsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def blog_params
-      params.expect(blog: [ :title ])
+      params.expect(blog: [ :title, :user_id ])
+    end
+
+    def set_users
+      @users = User.order(:username)
     end
 end

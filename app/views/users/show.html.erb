@@ -1,0 +1,30 @@
+<p style="color: green"><%= notice %></p>
+
+<nav>
+  <%= link_to "Blogs", blogs_path %> |
+  <%= link_to "Users", users_path %>
+</nav>
+
+<%= render @user %>
+
+<h2>Blogs</h2>
+
+<% if @blogs.any? %>
+  <div id="user_blogs">
+    <% @blogs.each do |blog| %>
+      <%= render blog %>
+      <p>
+        <%= link_to "Show this blog", blog %>
+      </p>
+    <% end %>
+  </div>
+<% else %>
+  <p>This user has no blogs yet.</p>
+<% end %>
+
+<div>
+  <%= link_to "Edit this user", edit_user_path(@user) %> |
+  <%= link_to "Back to users", users_path %>
+
+  <%= button_to "Destroy this user", @user, method: :delete %>
+</div>

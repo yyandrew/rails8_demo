@@ -180,8 +180,6 @@ GEM
     mini_mime (1.1.5)
     minitest (5.25.5)
     msgpack (1.8.0)
-    mysql2 (0.5.7)
-      bigdecimal
     net-imap (0.5.10)
       date
       net-protocol
@@ -583,7 +581,6 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   kamal
-  mysql2
   opentelemetry-exporter-otlp (~> 0.33.0)
   opentelemetry-instrumentation-all (~> 0.92.0)
   opentelemetry-sdk (~> 1.11)

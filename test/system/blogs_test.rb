@@ -15,6 +15,7 @@ class BlogsTest < ApplicationSystemTestCase
     click_on "New blog"
 
     fill_in "Title", with: @blog.title
+    select @blog.user.username, from: "User"
     click_on "Create Blog"
 
     assert_text "Blog was successfully created"
@@ -26,6 +27,7 @@ class BlogsTest < ApplicationSystemTestCase
     click_on "Edit this blog", match: :first
 
     fill_in "Title", with: @blog.title
+    select users(:two).username, from: "User"
     click_on "Update Blog"
 
     assert_text "Blog was successfully updated"

@@ -1,5 +1,10 @@
 <p style="color: green"><%= notice %></p>
 
+<nav>
+  <%= link_to "Blogs", blogs_path %> |
+  <%= link_to "Users", users_path %>
+</nav>
+
 <%= render @blog %>
 
 <div>
