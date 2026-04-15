@@ -1,21 +1,25 @@
-<p style="color: green"><%= notice %></p>
-
 <% content_for :title, "My Blogs" %>
 
-<nav>
-  <%= link_to "Blogs", blogs_path %> |
-  <%= link_to "Users", users_path %>
-</nav>
+<section class="stack-lg">
+  <div class="section-heading section-heading-split">
+    <div>
+      <p class="chip">Publishing</p>
+      <h2 class="section-title">Blogs</h2>
+      <p class="section-copy">Browse every post in the system. Logged-in users can publish under their own account only.</p>
+    </div>
+    <% if logged_in? %>
+      <%= link_to "New blog", new_blog_path, class: "button button-primary" %>
+    <% else %>
+      <%= link_to "Login to publish", login_path, class: "button button-primary" %>
+    <% end %>
+  </div>
 
-<h1>Blogs</h1>
-
-<div id="blogs">
-  <% @blogs.each do |blog| %>
-    <%= render blog %>
-    <p>
-      <%= link_to "Show this blog", blog %>
-    </p>
-  <% end %>
-</div>
-
-<%= link_to "New blog", new_blog_path %>
+  <div id="blogs" class="card-grid card-grid-two">
+    <% @blogs.each do |blog| %>
+      <div class="card-wrap">
+        <%= render blog %>
+        <%= link_to "Show this blog", blog, class: "card-link" %>
+      </div>
+    <% end %>
+  </div>
+</section>

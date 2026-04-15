@@ -1,6 +1,6 @@
 <%= form_with(model: blog) do |form| %>
   <% if blog.errors.any? %>
-    <div style="color: red">
+    <div class="error-box">
       <h2><%= pluralize(blog.errors.count, "error") %> prohibited this blog from being saved:</h2>
 
       <ul>
@@ -11,12 +11,14 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :title, style: "display: block" %>
-    <%= form.text_field :title %>
-  </div>
+  <div class="form-stack">
+    <div class="form-field">
+      <%= form.label :title %>
+      <%= form.text_field :title, class: "field", placeholder: "Write a short, clear blog title" %>
+    </div>
 
-  <div>
-    <%= form.submit %>
+    <div class="button-row">
+      <%= form.submit class: "button button-primary" %>
+    </div>
   </div>
 <% end %>

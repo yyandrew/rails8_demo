@@ -1,17 +1,11 @@
-<p style="color: green"><%= notice %></p>
+<section class="stack-md">
+  <%= render @blog %>
 
-<nav>
-  <%= link_to "Blogs", blogs_path %> |
-  <%= link_to "Users", users_path %>
-</nav>
-
-<%= render @blog %>
-
-<div>
-  <%= link_to "Back to blogs", blogs_path %>
-
+  <div class="panel action-row">
+    <%= link_to "Back to blogs", blogs_path, class: "button button-secondary" %>
   <% if current_user == @blog.user %>
-    | <%= link_to "Edit this blog", edit_blog_path(@blog) %>
-    <%= button_to "Destroy this blog", @blog, method: :delete %>
+    <%= link_to "Edit this blog", edit_blog_path(@blog), class: "button button-secondary" %>
+    <%= button_to "Destroy this blog", @blog, method: :delete, class: "button button-primary", form_class: "inline-form" %>
   <% end %>
-</div>
+  </div>
+</section>

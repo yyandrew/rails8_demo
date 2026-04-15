@@ -1,21 +1,23 @@
-<p style="color: green"><%= notice %></p>
-
 <% content_for :title, "Users" %>
 
-<nav>
-  <%= link_to "Blogs", blogs_path %> |
-  <%= link_to "Users", users_path %>
-</nav>
+<section class="stack-lg">
+  <div class="section-heading section-heading-split">
+    <div>
+      <p class="chip">Community</p>
+      <h2 class="section-title">Users</h2>
+      <p class="section-copy">See every registered user and how many blogs each one has published.</p>
+    </div>
+    <% unless logged_in? %>
+      <%= link_to "Create account", new_user_path, class: "button button-primary" %>
+    <% end %>
+  </div>
 
-<h1>Users</h1>
-
-<div id="users">
-  <% @users.each do |user| %>
-    <%= render user %>
-    <p>
-      <%= link_to "Show this user", user %>
-    </p>
-  <% end %>
-</div>
-
-<%= link_to "New user", new_user_path %>
+  <div id="users" class="card-grid card-grid-two">
+    <% @users.each do |user| %>
+      <div class="card-wrap">
+        <%= render user %>
+        <%= link_to "Show this user", user, class: "card-link" %>
+      </div>
+    <% end %>
+  </div>
+</section>

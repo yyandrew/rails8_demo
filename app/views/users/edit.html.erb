@@ -1,14 +1,17 @@
 <% content_for :title, "Editing user" %>
 
-<h1>Editing user</h1>
+<section class="content-narrow">
+  <div class="panel">
+    <p class="chip">Profile</p>
+    <h2 class="subheading">Editing user</h2>
+    <p class="title-note">Leave password blank if you do not want to change it.</p>
 
-<p>Leave password blank if you do not want to change it.</p>
-
-<%= render "form", user: @user %>
-
-<br>
-
-<div>
-  <%= link_to "Show this user", @user %> |
-  <%= link_to "Back to users", users_path %>
-</div>
+    <div class="stack-md">
+      <%= render "form", user: @user %>
+      <div class="button-row">
+        <%= link_to "Show this user", @user, class: "button button-secondary" %>
+        <%= link_to "Back to users", users_path, class: "button button-secondary" %>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,14 +1,17 @@
 <% content_for :title, "Editing blog" %>
 
-<h1>Editing blog</h1>
+<section class="content-narrow">
+  <div class="panel">
+    <p class="chip">Update</p>
+    <h2 class="subheading">Editing blog</h2>
+    <p class="title-note">Creator: <strong><%= @blog.user.username %></strong></p>
 
-<p>Creator: <%= @blog.user.username %></p>
-
-<%= render "form", blog: @blog %>
-
-<br>
-
-<div>
-  <%= link_to "Show this blog", @blog %> |
-  <%= link_to "Back to blogs", blogs_path %>
-</div>
+    <div class="stack-md">
+      <%= render "form", blog: @blog %>
+      <div class="button-row">
+        <%= link_to "Show this blog", @blog, class: "button button-secondary" %>
+        <%= link_to "Back to blogs", blogs_path, class: "button button-secondary" %>
+      </div>
+    </div>
+  </div>
+</section>

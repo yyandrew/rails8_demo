@@ -1,16 +1,18 @@
-<div id="<%= dom_id blog %>">
-  <p>
-    <strong>Title:</strong>
-    <%= blog.title %>
-  </p>
+<div id="<%= dom_id blog %>" class="panel">
+  <div class="card-header">
+    <div>
+      <p class="chip">Blog</p>
+      <h3 class="card-title"><%= blog.title %></h3>
+    </div>
+    <span class="blog-id-pill">#<%= blog.id %></span>
+  </div>
 
-  <p>
-    <strong>User:</strong>
+  <div class="meta-row">
+    <span class="meta-label">Author</span>
     <% if blog.user %>
-      <%= link_to blog.user.username, blog.user %>
+      <%= link_to blog.user.username, blog.user, class: "meta-pill meta-pill-author" %>
     <% else %>
-      Unassigned
+      <span class="meta-pill meta-pill-muted">Unassigned</span>
     <% end %>
-  </p>
-
+  </div>
 </div>

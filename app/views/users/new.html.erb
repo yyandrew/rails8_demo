@@ -1,11 +1,16 @@
 <% content_for :title, "New user" %>
 
-<h1>New user</h1>
+<section class="content-narrow">
+  <div class="panel">
+    <p class="chip">Register</p>
+    <h2 class="subheading">Create your account</h2>
+    <p class="title-note">Once registered, you can sign in and create blogs under your own username.</p>
 
-<%= render "form", user: @user %>
-
-<br>
-
-<div>
-  <%= link_to "Back to users", users_path %>
-</div>
+    <div class="stack-md">
+      <%= render "form", user: @user %>
+      <div class="button-row">
+        <%= link_to "Back to users", users_path, class: "button button-secondary" %>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,11 +1,12 @@
-<div id="<%= dom_id user %>">
-  <p>
-    <strong>Username:</strong>
-    <%= user.username %>
-  </p>
-
-  <p>
-    <strong>Blogs count:</strong>
-    <%= user.blogs.size %>
-  </p>
+<div id="<%= dom_id user %>" class="panel">
+  <div class="card-header">
+    <div>
+      <p class="chip">User</p>
+      <h3 class="card-title"><%= user.username %></h3>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Blogs</p>
+      <p class="stat-value"><%= user.blogs.size %></p>
+    </div>
+  </div>
 </div>

@@ -1,19 +1,26 @@
 <% content_for :title, "Login" %>
 
-<h1>Login</h1>
+<section class="content-narrow">
+  <div class="panel">
+    <p class="chip">Welcome back</p>
+    <h2 class="subheading">Login</h2>
+    <p class="title-note">Use your username and password to manage your own blogs.</p>
 
-<%= form_with url: login_path do |form| %>
-  <div>
-    <%= form.label :username, style: "display: block" %>
-    <%= form.text_field :username %>
-  </div>
+    <%= form_with url: login_path, class: "form-stack" do |form| %>
+      <div class="form-field">
+        <%= form.label :username %>
+        <%= form.text_field :username, class: "field", placeholder: "Your username" %>
+      </div>
 
-  <div>
-    <%= form.label :password, style: "display: block" %>
-    <%= form.password_field :password %>
-  </div>
+      <div class="form-field">
+        <%= form.label :password %>
+        <%= form.password_field :password, class: "field", placeholder: "Your password" %>
+      </div>
 
-  <div>
-    <%= form.submit "Login" %>
+      <div class="button-row">
+        <%= form.submit "Login", class: "button button-primary" %>
+        <%= link_to "Create an account", signup_path, class: "button button-secondary" %>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</section>

@@ -1,13 +1,16 @@
 <% content_for :title, "New blog" %>
 
-<h1>New blog</h1>
+<section class="content-narrow">
+  <div class="panel">
+    <p class="chip">Create</p>
+    <h2 class="subheading">New blog</h2>
+    <p class="title-note">Creator: <strong><%= current_user.username %></strong></p>
 
-<p>Creator: <%= current_user.username %></p>
-
-<%= render "form", blog: @blog %>
-
-<br>
-
-<div>
-  <%= link_to "Back to blogs", blogs_path %>
-</div>
+    <div class="stack-md">
+      <%= render "form", blog: @blog %>
+      <div class="button-row">
+        <%= link_to "Back to blogs", blogs_path, class: "button button-secondary" %>
+      </div>
+    </div>
+  </div>
+</section>
