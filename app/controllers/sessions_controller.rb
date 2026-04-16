@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
 
     if user&.authenticate(params[:password])
       session[:user_id] = user.id
-      redirect_to blogs_path, notice: "Logged in successfully."
+      redirect_to users_path(user), notice: "Logged in successfully."
     else
       flash.now[:alert] = "Invalid username or password."
       render :new, status: :unprocessable_entity

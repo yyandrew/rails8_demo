@@ -4,11 +4,10 @@ class UsersController < ApplicationController
   before_action :authorize_user!, only: %i[ edit update destroy ]
 
   def index
-    @users = User.includes(:blogs).order(:id)
+    @users = User.order(:id)
   end
 
   def show
-    @blogs = current_user == @user ? @user.blogs.order(:id) : Blog.none
   end
 
   def new

@@ -273,17 +273,6 @@ button.button:hover {
   font-weight: 900;
 }
 
-.blog-id-pill {
-  border-radius: var(--radius-pill);
-  background: var(--sand);
-  color: var(--coral);
-  padding: 0.65rem 0.85rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
 .meta-row {
   margin-top: 1.5rem;
   display: flex;
