@@ -18,4 +18,10 @@ class ApplicationController < ActionController::Base
 
       redirect_to login_path, alert: "Please log in first."
     end
+  private
+
+  def available_chat_models
+    RubyLLM.models.chat_models.all
+           .sort_by { |model| [ model.provider.to_s, model.name.to_s ] }
+  end
 end

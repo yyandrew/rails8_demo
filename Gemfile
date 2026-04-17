@@ -66,3 +66,5 @@ end
 gem "opentelemetry-exporter-otlp", "~> 0.33.0"
 gem "opentelemetry-sdk", "~> 1.11"
 gem "opentelemetry-instrumentation-all", "~> 0.92.0"
+
+gem "ruby_llm", "~> 1.14"
