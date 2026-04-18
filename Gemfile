@@ -66,3 +66,5 @@ end
 gem "opentelemetry-exporter-otlp", "~> 0.33.0"
 gem "opentelemetry-sdk", "~> 1.11"
 gem "opentelemetry-instrumentation-all", "~> 0.92.0"
+
+gem "lograge", "~> 0.14.0"
